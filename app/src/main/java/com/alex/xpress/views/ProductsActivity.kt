@@ -15,7 +15,10 @@ import kotlinx.android.synthetic.main.toolbar.*
 import android.content.DialogInterface
 import android.widget.EditText
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import java.text.SimpleDateFormat
 import java.util.*
@@ -147,4 +150,19 @@ class ProductsActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_product, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when (item!!.itemId) {
+            R.id.filter_product -> {
+                Toast.makeText(this,"En desarrollo..", Toast.LENGTH_SHORT).show()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
