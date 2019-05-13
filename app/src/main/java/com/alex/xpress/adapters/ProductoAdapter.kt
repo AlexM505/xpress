@@ -44,13 +44,12 @@ class ProductoAdapter(val listProducts: ArrayList<Product>, val context: Context
         calendar.time = stringDate
         vctoMill = calendar.timeInMillis
 
-        var dateValidate:Long = vctoMill - hoyMill
+        val dateValidate:Long = vctoMill - hoyMill
 
-        var txtCantidad:String
-        txtCantidad = "Cant: "+ listProducts[position].cantProduct.toString()
+        val txtCantidad:String = "Cant: "+ listProducts[position].cantProduct.toString()
 
         holder.indicador.setBackgroundResource(R.color.colorPrimaryDark)
-        holder.txtNameProduct.text = listProducts[position].nameProduct
+        holder.txtNameProduct.text = Utils.validateProductName(listProducts[position].nameProduct)
         holder.txtCantProduct.text = txtCantidad
 
         Picasso.with(context).load(listProducts[position].icon).into(holder.iconProduct)

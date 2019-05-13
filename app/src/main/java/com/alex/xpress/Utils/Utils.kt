@@ -84,6 +84,13 @@ class Utils {
             dialog.show()
         }
 
+        fun validateProductName(name:String):String{
+            return if(name.length < 18)
+                name.substring(0,name.length)
+            else
+                name.substring(0,15) + ".."
+        }
+
     }
 
 }
