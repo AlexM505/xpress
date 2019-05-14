@@ -1,9 +1,12 @@
 package com.alex.xpress.views
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -18,12 +21,15 @@ import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocal
 class MainActivity : AppCompatActivity(){
 
     lateinit var dbHelper : DbHelper
+    val PROJECT_URL = "https://github.com/AlexM505"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        toolbar.title = "> Xpress"
+        setSupportActionBar(toolbar)
+        title = " XPRESS"
+        toolbar.logo = resources.getDrawable(R.drawable.ic_donut_small_black_24dp)
 
         dbHelper = DbHelper(this)
         val cantProdNotExp:Int = dbHelper.notifProductsExpired()
@@ -115,6 +121,23 @@ class MainActivity : AppCompatActivity(){
                 }
             }
             .show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_github) {
+            startActivityActionView()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun startActivityActionView() {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(PROJECT_URL)))
     }
 
 }

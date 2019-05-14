@@ -11,8 +11,8 @@ import com.alex.xpress.database.DbHelper
 import com.alex.xpress.models.Product
 import kotlinx.android.synthetic.main.toolbar.*
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
-import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.RectanglePromptBackground
-import uk.co.samuelwall.materialtaptargetprompt.extras.focals.RectanglePromptFocal
+import uk.co.samuelwall.materialtaptargetprompt.extras.backgrounds.CirclePromptBackground
+import uk.co.samuelwall.materialtaptargetprompt.extras.focals.CirclePromptFocal
 
 class ExpiredActivity : AppCompatActivity() {
 
@@ -24,7 +24,7 @@ class ExpiredActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expired)
         setSupportActionBar(toolbar)
-        title = "Productos Vencidos"
+        title = "Productos Caducados"
 
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -48,8 +48,8 @@ class ExpiredActivity : AppCompatActivity() {
                     .setPrimaryText("Ups")
                     .setSecondaryText("No hay ningun producto vencido :D")
                     .setBackButtonDismissEnabled(true)
-                    .setPromptBackground(RectanglePromptBackground())
-                    .setPromptFocal(RectanglePromptFocal())
+                    .setPromptBackground(CirclePromptBackground())
+                    .setPromptFocal(CirclePromptFocal())
                     .show()
         }
     }
