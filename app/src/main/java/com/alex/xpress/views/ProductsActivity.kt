@@ -13,10 +13,13 @@ import com.alex.xpress.models.Product
 import kotlinx.android.synthetic.main.activity_products.*
 import kotlinx.android.synthetic.main.toolbar.*
 import android.content.DialogInterface
+import android.os.Build
 import android.widget.EditText
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -24,6 +27,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 import com.alex.xpress.Utils.Utils
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import uk.co.samuelwall.materialtaptargetprompt.MaterialTapTargetPrompt
 
 
@@ -31,6 +35,7 @@ class ProductsActivity : AppCompatActivity() {
 
     lateinit var dbHelper : DbHelper
 
+    private var mBottomSheetDialog: BottomSheetDialog? = null
     var dataListProduct: ArrayList<Product>? = null
     val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.US)
     var cal = Calendar.getInstance()
@@ -67,22 +72,15 @@ class ProductsActivity : AppCompatActivity() {
     }
 
 
-    fun dialogAddProduct():Int {
-        var notf = 1
-        val li = LayoutInflater.from(applicationContext)
-        val promptsView = li.inflate(R.layout.dialog_add_product, null)
+    private fun dialogAddProduct():Int {
+        var notf = 0
+        val bottomSheetLayout = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
 
-        val alertDialogBuilder = AlertDialog.Builder(
-            this@ProductsActivity
-        )
-
-        alertDialogBuilder.setView(promptsView)
-
+        val etName = bottomSheetLayout.findViewById(R.id.etNombre) as EditText
+        val etCant = bottomSheetLayout.findViewById(R.id.etCant) as EditText
+        val btnVcto = bottomSheetLayout.findViewById(R.id.btnFechaVcto) as TextView
+        val tvFechaVcto = bottomSheetLayout.findViewById(R.id.txtFechaVcto) as TextView
         val newProduct = Product()
-
-        val etName = promptsView.findViewById(R.id.etNombre) as EditText
-        val etCant = promptsView.findViewById(R.id.etCant) as EditText
-        val btnVcto = promptsView.findViewById(R.id.btnFechaVcto) as TextView
 
         val dateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
@@ -103,15 +101,14 @@ class ProductsActivity : AppCompatActivity() {
                 cal.get(Calendar.DAY_OF_MONTH)).show()
         }
 
-        alertDialogBuilder
-            .setCancelable(false)
-            .setPositiveButton("Agregar") { dialog, id ->
+        bottomSheetLayout.findViewById<Button>(R.id.button_ok)
+            .setOnClickListener{
                 if(etName.text.toString() == "")
-                    Utils.dialogStandar(this@ProductsActivity,"Advertencia","El producto que trato de registrar no cuenta con todos los parametros, intente nuevamente ingresando todo lo solicitado.")
+                    etName.error = "Debe digitar el nombre del producto!"
                 else if(etCant.text.toString() == "")
-                    Utils.dialogStandar(this@ProductsActivity,"Advertencia","El producto que trato de registrar no cuenta con todos los parametros, intente nuevamente ingresando todo lo solicitado.")
+                    etCant.error = "Digite la cantidad que hay en stock"
                 else if (newProduct.expirationDate == "")
-                    Utils.dialogStandar(this@ProductsActivity,"Advertencia","El producto que trato de registrar no cuenta con todos los parametros, intente nuevamente ingresando todo lo solicitado.")
+                    tvFechaVcto.setTextColor(resources.getColor(R.color.colorRed))
                 else{
                     newProduct.nameProduct = etName.text.toString()
                     newProduct.cantProduct = Integer.parseInt(etCant.text.toString())
@@ -124,17 +121,20 @@ class ProductsActivity : AppCompatActivity() {
                     dbHelper.insertProduct(newProduct)
                     dataListProduct?.add(newProduct)
                     notf = 0
+                    mBottomSheetDialog!!.dismiss()
                 }
             }
-            .setNegativeButton("Cancelar",
-                DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
 
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
+        bottomSheetLayout.findViewById<Button>(R.id.button_close)
+            .setOnClickListener { mBottomSheetDialog!!.dismiss() }
 
-        if(dataListProduct!!.size == 0){
-            Utils.dialogStandar(this@ProductsActivity, "Perfecto", "Aqui tienes que ingresar el nombre del producto, la cantidad que hay en stock de productos que vencen la misma fecha y su fecha de vencimiento. Adelante!")
-        }
+        mBottomSheetDialog = BottomSheetDialog(this)
+        mBottomSheetDialog!!.setContentView(bottomSheetLayout)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            mBottomSheetDialog!!.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+
+        mBottomSheetDialog!!.show()
+        mBottomSheetDialog!!.setOnDismissListener{ mBottomSheetDialog = null }
 
         return notf
     }
