@@ -58,9 +58,7 @@ class ProductsActivity : AppCompatActivity() {
         recyclerView.adapter = prodAdapter
 
         fab.setOnClickListener { view ->
-            var notf = dialogAddProduct()
-            if(notf == 0)
-                prodAdapter.notifyItemInserted(R.layout.cardview_productos)
+            dialogAddProduct(prodAdapter)
         }
     }
 
@@ -72,8 +70,7 @@ class ProductsActivity : AppCompatActivity() {
     }
 
 
-    private fun dialogAddProduct():Int {
-        var notf = 0
+    private fun dialogAddProduct(prodAdapter:ProductoAdapter) {
         val bottomSheetLayout = layoutInflater.inflate(R.layout.bottom_sheet_dialog, null)
 
         val etName = bottomSheetLayout.findViewById(R.id.etNombre) as EditText
@@ -112,7 +109,7 @@ class ProductsActivity : AppCompatActivity() {
                 else{
                     newProduct.nameProduct = etName.text.toString()
                     newProduct.cantProduct = Integer.parseInt(etCant.text.toString())
-                    newProduct.icon = R.drawable.dateevent
+                    newProduct.icon = R.drawable.calendar
                     cal = Calendar.getInstance()
                     newProduct.today = sdf.format(cal.time)
                     newProduct.state = Utils.validateStateProduct(newProduct.expirationDate)
@@ -120,7 +117,7 @@ class ProductsActivity : AppCompatActivity() {
 
                     dbHelper.insertProduct(newProduct)
                     dataListProduct?.add(newProduct)
-                    notf = 0
+                    prodAdapter.notifyItemInserted(R.layout.cardview_productos)
                     mBottomSheetDialog!!.dismiss()
                 }
             }
@@ -134,9 +131,7 @@ class ProductsActivity : AppCompatActivity() {
             mBottomSheetDialog!!.window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
 
         mBottomSheetDialog!!.show()
-        mBottomSheetDialog!!.setOnDismissListener{ mBottomSheetDialog = null }
-
-        return notf
+        mBottomSheetDialog!!.setOnDismissListener{ mBottomSheetDialog = null}
     }
 
     private fun showFabPrompt(){

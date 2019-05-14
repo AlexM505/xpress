@@ -28,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:maxLength="35"/>
+                android:maxLength="35"
+                android:maxLines="1"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -42,7 +43,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
-                android:maxLength="6"/>
+                android:maxLength="6"
+                android:maxLines="1"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 

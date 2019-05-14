@@ -61,9 +61,9 @@ class Utils {
         }
 
         fun validateStateProduct(expiration:String):String{
-            val sdf = SimpleDateFormat("dd/M/yyyy HH:mm:ss")
+            val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
             val currentDate = sdf.format(Date())
-            var estado: String = if(currentDate.compareTo(expiration) > 0 || currentDate.equals(expiration))
+            var estado: String = if(expiration < currentDate || currentDate == expiration)
                 "CADUCADO"
             else
                 "VIGENTE"
