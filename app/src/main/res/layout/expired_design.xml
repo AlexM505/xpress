@@ -3,7 +3,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:padding="4dp"
-              android:layout_height="100dp"
+              android:layout_height="110dp"
               android:id="@+id/expired_design">
 
     <LinearLayout
@@ -18,7 +18,7 @@
         <TextView
                 android:id="@+id/txtExpiredName"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="42dp"
                 android:layout_weight="1.3"
                 android:text="Nombre Producto"
                 android:textSize="18sp"

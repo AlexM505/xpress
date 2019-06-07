@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.alex.xpress.R
@@ -94,9 +95,21 @@ class ProductoAdapter(val listProducts: ArrayList<Product>, val context: Context
                 listProducts.removeAt(holder.layoutPosition)
                 notifyItemRemoved(holder.layoutPosition)
             }else{
-                Toast.makeText(context,"Producto vigente",Toast.LENGTH_SHORT).show()
-            }
+                val builder = AlertDialog.Builder(context)
 
+                builder.setTitle("Advertencia!")
+                builder.setMessage("Desea eliminar este registro?, no se podra recuperar la informacion.")
+                builder.setPositiveButton("Borrar"){dialog, which ->
+                    dialog.dismiss()
+                    if(dbHelper.deleteProduct(listProducts[holder.layoutPosition].nameProduct, listProducts[holder.layoutPosition].cantProduct)) {
+                        listProducts.removeAt(holder.layoutPosition)
+                        notifyItemRemoved(holder.layoutPosition)
+                    }
+                }
+
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
+            }
         }
 
     }

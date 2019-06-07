@@ -45,11 +45,12 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     @Throws(SQLiteConstraintException::class)
-    fun deleteProduct(idProduct: Int): Boolean {
+    fun deleteProduct(name: String, cant:Int): Boolean {
         val db = writableDatabase
 
         val sql = "Delete from "+ DbExpress.ProductEntry.TABLE_NAME +
-                "Where "+ DbExpress.ProductEntry.COLUMN_PRODUCT_ID + " = "+ idProduct
+                " Where "+ DbExpress.ProductEntry.COLUMN_NAME + " = '"+ name +
+                "' and " + DbExpress.ProductEntry.COLUMN_CANT + " = " + cant
 
         db.execSQL(sql)
 
@@ -94,12 +95,12 @@ class DbHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null
         return products
     }
 
-    fun readAllProducts(): ArrayList<Product> {
+    fun readAllProductsVigentes(): ArrayList<Product> {
         val products = ArrayList<Product>()
         val db = writableDatabase
         var cursor: Cursor? = null
         try {
-            cursor = db.rawQuery("select * from " + DbExpress.ProductEntry.TABLE_NAME, null)
+            cursor = db.rawQuery("select * from " + DbExpress.ProductEntry.TABLE_NAME + " where state = 'VIGENTE';", null)
         } catch (e: SQLiteException) {
             db.execSQL(SQL_CREATE_ENTRIES)
             return ArrayList()

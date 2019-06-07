@@ -49,7 +49,7 @@ class ProductsActivity : AppCompatActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         dbHelper = DbHelper(this)
-        dataListProduct = dbHelper.readAllProducts()
+        dataListProduct = dbHelper.readAllProductsVigentes()
 
         val recyclerView = findViewById<RecyclerView>(R.id.productos_recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.VERTICAL, false) as RecyclerView.LayoutManager?

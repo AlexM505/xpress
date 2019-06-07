@@ -1,8 +1,12 @@
 package com.alex.xpress.Utils
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -60,15 +64,19 @@ class Utils {
             )
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         fun validateStateProduct(expiration:String):String{
             val sdf = SimpleDateFormat("dd/MM/yyyy HH:mm:ss")
             val currentDate = sdf.format(Date())
-            var estado: String = if(expiration < currentDate || currentDate == expiration)
+
+            val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss", Locale.US)
+            val dateCurrentDay = LocalDate.parse(currentDate, formatter)
+            val dateExpiration = LocalDate.parse(expiration, formatter)
+
+            return if(dateExpiration.isBefore(dateCurrentDay) || dateExpiration.compareTo(dateCurrentDay) == 0)
                 "CADUCADO"
             else
                 "VIGENTE"
-
-            return estado
         }
 
         fun dialogStandar(context: Context, title:String, msg:String){
